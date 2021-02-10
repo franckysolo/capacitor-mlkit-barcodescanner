@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.franckysolo.plugins.capacitor.capacitormlkitbarcodescanner">
+    <meta-data
+        android:name="com.google.mlkit.vision.DEPENDENCIES"
+        android:value="barcode" />
+    <application>
+        <activity
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:name="com.franckysolo.plugins.capacitor.ScanActivity">
+        </activity>
+    </application>
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA" />
+</manifest>
