@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ScannerViewController" customModule="Plugin" customModuleProvider="target">
+            <connections>
+                <outlet property="cancelButton" destination="77g-hH-fG6" id="b4d-pb-6bn"/>
+                <outlet property="imageView" destination="nGt-fR-LLS" id="KcB-2p-T03"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ha5-eO-2F2">
+                    <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="Axd-b5-w8I"/>
+                    </constraints>
+                    <items>
+                        <barButtonItem title="Cancel" id="77g-hH-fG6"/>
+                    </items>
+                </toolbar>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nGt-fR-LLS">
+                    <rect key="frame" x="0.0" y="323" width="414" height="250"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="250" id="TAZ-5f-Qbt"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="nGt-fR-LLS" secondAttribute="trailing" id="Cmh-hK-ru0"/>
+                <constraint firstItem="nGt-fR-LLS" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="NLc-VW-1oK"/>
+                <constraint firstItem="Ha5-eO-2F2" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="O2n-Kr-qjq"/>
+                <constraint firstItem="Ha5-eO-2F2" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="cFB-9a-p2x"/>
+                <constraint firstItem="nGt-fR-LLS" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="x2A-x9-IYb"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Ha5-eO-2F2" secondAttribute="trailing" id="yig-TN-kYb"/>
+            </constraints>
+            <point key="canvasLocation" x="-36.231884057971016" y="133.92857142857142"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
