@@ -14,6 +14,16 @@
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.franckysolo.plugins.capacitor.ScanTracker
+        android:id="@+id/scan_tracker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@id/scan_preview"
+        app:layout_constraintLeft_toLeftOf="@id/scan_preview"
+        app:layout_constraintRight_toRightOf="@id/scan_preview"
+        app:layout_constraintTop_toTopOf="@id/scan_preview"
+        />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"

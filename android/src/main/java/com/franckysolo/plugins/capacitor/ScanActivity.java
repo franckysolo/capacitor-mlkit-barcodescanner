@@ -1,6 +1,7 @@
 package com.franckysolo.plugins.capacitor;
 
 import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
@@ -10,7 +11,6 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleOwner;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import android.media.AudioManager;
 import android.media.Image;
 import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.Size;
 import android.view.View;
@@ -43,7 +44,8 @@ public class ScanActivity extends AppCompatActivity {
 
     private static final String TAG = "Barcodescanner";
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
-    private PreviewView scanPreview;
+    private PreviewView mScanPreview;
+    private ScanTracker mScanTracker;
     private ExecutorService cameraExecutor;
     private ImageCapture imageCapture;
     private InputImage scanImage;
@@ -92,8 +94,21 @@ public class ScanActivity extends AppCompatActivity {
      */
     private void initResources() {
         setContentView(R.layout.activity_scan);
-        scanPreview = findViewById(R.id.scan_preview);
-        mScanButton = (Button) findViewById(R.id.scan_button);
+
+        mScanPreview = findViewById(R.id.scan_preview);
+        if (mScanPreview == null) {
+            Log.d(TAG, "Preview is null");
+        }
+
+        mScanButton = findViewById(R.id.scan_button);
+        if (mScanButton == null) {
+            Log.d(TAG, "scanButton is null");
+        }
+
+        mScanTracker = findViewById(R.id.scan_tracker);
+        if (mScanTracker == null) {
+            Log.d(TAG, "scan tracker is null");
+        }
     }
 
     /**
@@ -132,7 +147,17 @@ public class ScanActivity extends AppCompatActivity {
             public void onCaptureSuccess(final ImageProxy image)  {
 
                 try (Image mediaImage = image.getImage()) {
-                    OnSuccessListener successListener = new OnSuccessListener<List<Barcode>>() {
+
+                    if (mediaImage == null) {
+                        return;
+                    }
+
+                    scanImage = InputImage.fromMediaImage(
+                        mediaImage,
+                        image.getImageInfo().getRotationDegrees()
+                    );
+
+                    scanner.process(scanImage).addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
                         @Override
                         public void onSuccess(List<Barcode> codes) {
                             Toast.makeText(getApplicationContext(),
@@ -143,35 +168,39 @@ public class ScanActivity extends AppCompatActivity {
                                 int valueType = barcode.getValueType();
                                 Log.i(TAG, "Barcode rawValue " + resultCode);
                                 Log.i(TAG, "Barcode valueType " + valueType);
+                                invokeScanTracker(barcode, image);
                                 final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_ALARM, 70);
                                 tg.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
                                 mediaImage.close();
+
                                 image.close();
-                                finish();
-                            }}
-
-                    };
-
-                    OnFailureListener failureListener = new OnFailureListener() {
+                            }
+                            closeAfterDelay();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(getApplicationContext(),
                                     "Cannot scan this code.",
                                     Toast.LENGTH_SHORT).show();
                             mediaImage.close();
+
                             image.close();
                         }
-                    };
-
-                    scanImage = InputImage.fromMediaImage(
-                        mediaImage,
-                        image.getImageInfo().getRotationDegrees()
-                    );
-
-                    scanner.process(scanImage)
-                            .addOnSuccessListener(successListener)
-                            .addOnFailureListener(failureListener);
+                    });
                 }
+            }
+
+            /**
+             * Close camera view after decode barcode
+             */
+            private void closeAfterDelay() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        finish();
+                    }
+                }, 3000);
             }
         });
     }
@@ -189,22 +218,28 @@ public class ScanActivity extends AppCompatActivity {
                 .build();
 
         ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
-                .setTargetResolution(new Size(720, 1280))
+                .setTargetResolution(new Size(1920, 1080))
                 .setImageQueueDepth(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build();
 
-        ImageCapture.Builder builder = new ImageCapture.Builder();
-        imageCapture = builder.build();
+        imageCapture = new ImageCapture.Builder()
+                .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation())
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                .build();
 
-        preview.setSurfaceProvider(scanPreview.createSurfaceProvider());
+        preview.setSurfaceProvider(mScanPreview.createSurfaceProvider());
 
         cameraProvider.bindToLifecycle(
-            (LifecycleOwner)this,
+            this,
             cameraSelector,
             preview,
             imageCapture,
             imageAnalysis
         );
+    }
+
+    private void invokeScanTracker(Barcode barcode, ImageProxy image) {
+        mScanTracker.track(barcode, image);
     }
 
     /**
