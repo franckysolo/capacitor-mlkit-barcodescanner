@@ -63,6 +63,7 @@ class ScannerViewController: UIViewController, AVCaptureVideoDataOutputSampleBuf
                 for barcode in barcodes! {
                     print(barcode.rawValue!)
                     self.session.stopRunning()
+                    AudioServicesPlayAlertSound(SystemSoundID(1200))
                     self.callback?(self.call, barcode.rawValue!)
                     self.dismiss(animated: true, completion: nil)
                     return
