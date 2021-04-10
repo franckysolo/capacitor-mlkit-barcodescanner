@@ -32,8 +32,8 @@ export default defineComponent({
     const code = ref(null)
     const scanBarcode = async () => {
       let result = await MlkitBarcodescanner.scanBarcode()
-      console.log(result)
       code.value = result
+      console.log(result)
     }
 
     return {

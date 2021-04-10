@@ -9,9 +9,23 @@ export class MlkitBarcodescannerWeb extends WebPlugin implements MlkitBarcodesca
     });
   }
 
+  // @TODO try dynamsoft-javascript-barcode for pwa implemntation
+  async scanBarcode(): Promise<{ code: string }> {
 
-  async scanBarcode(): Promise<{ value: string }> {
-    return { value: 'test' }
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      alert('heo')
+      // try {
+      //   let stream = await navigator.mediaDevices.getUserMedia({ video: true })
+      //   let video = document.createElement('video')
+      //   document.body.appendChild(video)
+      //   video.srcObject = stream
+      //   video.play()
+      // } catch(e) {
+      //   console.error(e)
+      // }
+    }
+
+    return { code: 'test' }
   }
 }
 

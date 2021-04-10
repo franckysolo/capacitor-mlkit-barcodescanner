@@ -5,5 +5,5 @@ declare module '@capacitor/core' {
 }
 
 export interface MlkitBarcodescannerPlugin {
-  scanBarcode(): Promise<{ value: string }>;
+  scanBarcode(): Promise<{ code: string }>;
 }

@@ -32,6 +32,7 @@ xcuserdata
 bin/
 gen/
 out/
+etc/
 
 # Gradle files
 .gradle/
